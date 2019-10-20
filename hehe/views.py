@@ -18,7 +18,7 @@ def get_client_ip(request):
 def home(request):
     ip = get_client_ip(request)
     print(ip)
-    if IPs.objects.filter(ip=ip).len():
+    if IPs.objects.filter(ip=ip).count():
         return render(request, 'hehe/ok.html')
     else:
         IPs.objects.create(ip=ip)
