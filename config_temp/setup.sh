@@ -1,12 +1,15 @@
 #!/bin/bash
 
-OLISTENPORT=28562
 VNET="192.168.210.0"
 echo "VNET="$VNET
 
-read -p "Enter listen port of ocserv service, default=$OLISTENPORT: " OLISTENPORT
+OLISTENPORT=28562
+read -p "Enter listen port of ocserv service, default=$OLISTENPORT: " PORTREAD
 
-if [[ $SLISTENPORT =~ ^[0-9]+$ ]] || [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+if [[ $PORTREAD =~ ^[0-9]+$ ]] || [[ -z $response ]]; then
+	if [[ $PORTREAD =~ ^[0-9]+$ ]]; then
+    OLISTENPORT=$PORTREAD
+  fi
 	echo "listen port="$OLISTENPORT
 else
 	echo "invalide port number"
@@ -14,9 +17,12 @@ else
 fi
 
 SLISTENPORT=38562
-read -p "Enter listen port of ss service, default=$SLISTENPORT: " SLISTENPORT
+read -p "Enter listen port of ss service, default=$SLISTENPORT: " PORTREAD
 
-if [[ $SLISTENPORT =~ ^[0-9]+$ ]] || [[ $response =~ ^(yes|y| ) ]] || [[ -z $response ]]; then
+if [[ $PORTREAD =~ ^[0-9]+$ ]] || [[ -z $response ]]; then
+	if [[ $PORTREAD =~ ^[0-9]+$ ]]; then
+    SLISTENPORT=$PORTREAD
+  fi
 	echo "listen port="$SLISTENPORT
 else
 	echo "invalide port number"
