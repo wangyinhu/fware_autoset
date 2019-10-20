@@ -34,4 +34,8 @@ mkdir /var/log/uwsgi/
 
 chown $LINUX_USERNAME:$LINUX_USERNAME /var/log/uwsgi/
 
+echo "installing qbittorrent-nox"
+
+apt install qbittorrent-nox
+
 echo 'all done!'

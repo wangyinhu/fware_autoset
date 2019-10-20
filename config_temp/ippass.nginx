@@ -1,26 +1,28 @@
 #
 server {
-	listen 80;
-	listen [::]:80;
+        listen 80 default_server;
+        listen [::]:80 default_server;
 
-	# SSL configuration
-	
+        root /home/yale/Downloads;
 
-      server_name     _;
+        server_name _;
 
-      root /var/www/html;
+        location ~^/media/  {
+        }
 
-      location ~^/media/  {
-      }
+        location ~^/static/ {
+        }
 
-      location ~^/static/ {
-      }
 
-        location / {
+        location ~^/ippass|admin/ {
                 include /etc/nginx/uwsgi_params;
                 uwsgi_pass unix:/home/LINUX_USERNAME/ippass/uwsgi.sock;
         }
 
+        location / {
+                autoindex on;
+                auth_basic "Restricted Content";
+                auth_basic_user_file /home/LINUX_USERNAME/nginx_pass;
+        }
+
 }
-
-

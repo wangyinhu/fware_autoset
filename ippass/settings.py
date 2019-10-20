@@ -27,7 +27,7 @@ DEBUG = True
 
 ALLOWED_HOSTS = ['*']
 
-LOGIN_URL = 'admin/login/'
+LOGIN_URL = '/admin/login/'
 
 # Application definition
 
@@ -120,11 +120,11 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/2.2/howto/static-files/
 
-STATIC_ROOT = '/var/www/html/static/'
+STATIC_ROOT = '~/static/'
 
 STATIC_URL = '/static/'
 
-MEDIA_ROOT = '/var/www/html/media/'
+MEDIA_ROOT = '~/media/'
 
 MEDIA_URL = '/media/'
 
