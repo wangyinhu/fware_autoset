@@ -6,9 +6,15 @@ server {
 	# SSL configuration
 	
 
-        server_name     _;
+      server_name     _;
 
-	root /var/www/html;
+      root /var/www/html;
+
+      location ~^/media/  {
+      }
+
+      location ~^/static/ {
+      }
 
         location / {
                 include /etc/nginx/uwsgi_params;

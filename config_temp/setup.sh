@@ -177,6 +177,7 @@ do
     continue
   fi
   echo "password="$PASSWORD
+  break
 done
 
 echo "installing software"

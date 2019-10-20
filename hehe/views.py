@@ -1,6 +1,7 @@
 from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django import forms
+from hehe.models import IPs
 import os
 
 
@@ -17,8 +18,12 @@ def get_client_ip(request):
 def home(request):
     ip = get_client_ip(request)
     print(ip)
-    os.system('echo "' + ip + '" > $HOME/pass_ip.txt')
-    return render(request, 'hehe/ok.html')
+    if IPs.objects.filter(ip=ip).len():
+        return render(request, 'hehe/ok.html')
+    else:
+        IPs.objects.create(ip=ip)
+        os.system('echo "' + ip + '" > $HOME/pass_ip.txt')
+        return render(request, 'hehe/ok.html', {'stutas': 'new'})
 
 
 class NameForm(forms.Form):
