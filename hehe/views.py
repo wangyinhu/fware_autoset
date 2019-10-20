@@ -19,11 +19,11 @@ def home(request):
     ip = get_client_ip(request)
     print(ip)
     if IPs.objects.filter(ip=ip).count():
-        return render(request, 'hehe/ok.html')
+        return render(request, 'hehe/ok.html', {'status': 'old', 'ip': ip})
     else:
         IPs.objects.create(ip=ip)
         os.system('echo "' + ip + '" > $HOME/pass_ip.txt')
-        return render(request, 'hehe/ok.html', {'stutas': 'new'})
+        return render(request, 'hehe/ok.html', {'status': 'new', 'ip': ip})
 
 
 class NameForm(forms.Form):
