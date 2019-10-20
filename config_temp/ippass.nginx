@@ -1,0 +1,20 @@
+#
+server {
+	listen 80;
+	listen [::]:80;
+
+	# SSL configuration
+	
+
+        server_name     _;
+
+	root /var/www/html;
+
+        location / {
+                include /etc/nginx/uwsgi_params;
+                uwsgi_pass unix:/home/LINUX_USERNAME/ippass/uwsgi.sock;
+        }
+
+}
+
+
