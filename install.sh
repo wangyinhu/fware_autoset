@@ -19,12 +19,12 @@ sed -i -e "s/ippass/$PROJECT_NAME/g" reload.sh
 sed -i -e "s/ippass/$PROJECT_NAME/g" start.sh
 sed -i -e "s/ippass/$PROJECT_NAME/g" stop.sh
 
-cp config_temp/ippass.nginx /etc/nginx/sites-available/$PROJECT_NAME.nginx
+cp config_temp/ippass.conf /etc/nginx/sites-available/$PROJECT_NAME.conf
 
-sed -i -e "s/ippass/$PROJECT_NAME/g" /etc/nginx/sites-available/$PROJECT_NAME.nginx
-sed -i -e "s/LINUX_USERNAME/$LINUX_USERNAME/g" /etc/nginx/sites-available/$PROJECT_NAME.nginx
+sed -i -e "s/ippass/$PROJECT_NAME/g" /etc/nginx/sites-available/$PROJECT_NAME.conf
+sed -i -e "s/LINUX_USERNAME/$LINUX_USERNAME/g" /etc/nginx/sites-available/$PROJECT_NAME.conf
 
-ln -s /etc/nginx/sites-available/$PROJECT_NAME.nginx /etc/nginx/sites-enabled/$PROJECT_NAME.nginx
+ln -s /etc/nginx/sites-available/$PROJECT_NAME.conf /etc/nginx/sites-enabled/$PROJECT_NAME.conf
 
 service nginx restart
 
