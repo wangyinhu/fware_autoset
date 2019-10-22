@@ -256,6 +256,7 @@ do
       echo \$temp
       iptables -I INPUT -s \"\$ipaddress\" -p tcp --dport $SLISTENPORT -j ACCEPT
       iptables -I INPUT -s \"\$ipaddress\" -p tcp --dport $OLISTENPORT -j ACCEPT
+      netfilter-persistent save
     fi
   done
   " > /home/$LUNM/root_pass.sh
