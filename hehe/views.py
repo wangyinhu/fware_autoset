@@ -26,6 +26,15 @@ def home(request):
         return render(request, 'hehe/ok.html', {'status': 'new', 'ip': ip})
 
 
+@login_required
+def flush(request):
+    home_dir = os.environ['HOME']
+    with open(home_dir + "/flush_ip.txt", 'a+') as ff:
+        for i in IPs.objects.all():
+            ff.write(i.ip + '\n')
+    return render(request, 'hehe/ok.html', {'status': 'new', 'ip': 'flush'})
+
+
 class NameForm(forms.Form):
     ipaddress = forms.GenericIPAddressField(label='IP addres')
 

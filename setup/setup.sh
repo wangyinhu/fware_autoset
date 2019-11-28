@@ -3,6 +3,14 @@
 VNET="192.168.210.0"
 echo "VNET="$VNET
 
+SETUPDIR=$(pwd)
+echo "setup dir="$SETUPDIR
+
+ips=$(hostname -I)
+ipsa=($ips)
+INTERFACE_IP=${ipsa[0]}
+echo "listen address="$INTERFACE_IP
+
 OLISTENPORT=28562
 read -p "Enter listen port of ocserv service, default=$OLISTENPORT: " PORTREAD
 
@@ -29,11 +37,6 @@ else
 	exit 1
 fi
 
-ips=$(hostname -I)
-ipsa=($ips)
-INTERFACE_IP=${ipsa[0]}
-echo "listen address="$INTERFACE_IP
-
 INTERFACE_NAME="null"
 
 for interface_name in $(ls /sys/class/net)
@@ -59,7 +62,7 @@ else
 fi
 
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root"
+   echo "This script must run as root"
    exit 1
 fi
 
@@ -70,29 +73,11 @@ echo "goto /etc/ocserv/"
 
 cd /etc/ocserv/ || exit 1
 
-echo "generating file 'ca.tmpl'"
+echo "generating file ca.tmpl server.tmpl"
 
-echo "cn = \"VPN CA\"
-organization = \"heheda\"
-serial = 1
-expiration_days = 3650
-ca
-signing_key
-cert_signing_key
-crl_signing_key " > ca.tmpl
-
-echo "done!"
-
-echo "generating file 'server.tmpl'"
-
-echo "cn = $INTERFACE_IP
-organization = \"heheda\"
-expiration_days = 3650
-signing_key
-encryption_key
-tls_www_server" > server.tmpl
-
-echo "done!"
+cp $SETUPDIR/ca.tmpl ca.tmpl
+cp $SETUPDIR/server.tmpl server.tmpl
+sed -i -e "s/INTERFACE_IP/$INTERFACE_IP/g" server.tmpl
 
 
 certtool --generate-privkey --outfile ca-key.pem
@@ -107,55 +92,19 @@ sed -i -e "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
 sysctl -p /etc/sysctl.conf
 
 
-echo "generating file 'ocserv.conf'"
+OCSERV_CONF="ocserv.conf"
+echo "generating file $OCSERV_CONF"
 
-if [ ! -f ocserv.conf.bkp ]; then
-	mv ocserv.conf ocserv.conf.bkp
+if [ ! -f $OCSERV_CONF.bkp ]; then
+	mv $OCSERV_CONF $OCSERV_CONF.bkp
 else
 	echo "back up file exists"
 fi
 
 
-echo "auth = \"plain[/etc/ocserv/ocpasswd]\"
-tcp-port = $OLISTENPORT
-udp-port = $OLISTENPORT
-run-as-user = nobody
-run-as-group = daemon
-socket-file = /var/run/ocserv-socket
-server-cert = /etc/ocserv/server-cert.pem
-server-key = /etc/ocserv/server-key.pem
-ca-cert = /etc/ssl/certs/ssl-cert-snakeoil.pem
-isolate-workers = true
-max-clients = 16
-max-same-clients = 20
-keepalive = 32400
-dpd = 10
-mobile-dpd = 1800
-try-mtu-discovery = true
-cert-user-oid = 0.9.2342.19200300.100.1.1
-tls-priorities = \"NORMAL:%SERVER_PRECEDENCE:%COMPAT:-VERS-SSL3.0\"
-auth-timeout = 240
-min-reauth-time = 3
-max-ban-score = 50
-ban-reset-time = 300
-cookie-timeout = 300
-deny-roaming = false
-rekey-time = 172800
-rekey-method = ssl
-use-utmp = true
-use-occtl = true
-pid-file = /var/run/ocserv.pid
-device = vpns
-predictable-ips = true
-default-domain = example.com
-ipv4-network = $VNET
-ipv4-netmask = 255.255.255.0
-tunnel-all-dns = true
-dns = 8.8.8.8
-ping-leases = false
-cisco-client-compat = true
-dtls-legacy = true
-" > ocserv.conf
+cp $SETUPDIR/ocserv.conf $OCSERV_CONF
+sed -i -e "s/LISTENPORT/$OLISTENPORT/g" $OCSERV_CONF
+sed -i -e "s/VNET/$VNET/g" $OCSERV_CONF
 
 echo "done!"
 
@@ -232,8 +181,6 @@ done
 
 echo "done!"
 
-echo "generating ippass.sh ..."
-
 while true
 do
   read -p "please input linux usrename for ippass script generation: " LUNM
@@ -241,25 +188,22 @@ do
     echo "done"
     break
   fi
-  echo "iptables -I INPUT -s \"\$1\" -p tcp --dport $SLISTENPORT -j ACCEPT" >> /home/$LUNM/ippass.sh
-  echo "iptables -I INPUT -s \"\$1\" -p tcp --dport $OLISTENPORT -j ACCEPT" >> /home/$LUNM/ippass.sh
-  chown $LUNM:$LUNM /home/$LUNM/ippass.sh
-  chmod +x /home/$LUNM/ippass.sh
+
+  echo "generating ippass.sh"
+  IPPASS=/home/$LUNM/ippass.sh
+  cp $SETUPDIR/ippass.sh $IPPASS
+  sed -i -e "s/SLISTENPORT/$SLISTENPORT/g" $IPPASS
+  sed -i -e "s/OLISTENPORT/$OLISTENPORT/g" $IPPASS
+  chown $LUNM:$LUNM $IPPASS
+  chmod +x $IPPASS
 
   echo "generating root pass script file"
-  echo "#!/bin/bash
-  ipaddress=\"null\"
-  while inotifywait -e close_write /home/$LUNM/pass_ip.txt; do
-    temp=\"\$(cat /home/$LUNM/pass_ip.txt)\"
-    if [ \"\$temp\" != \"\$ipaddress\" ]; then
-      ipaddress=\$temp
-      echo \$temp
-      iptables -I INPUT -s \"\$ipaddress\" -p tcp --dport $SLISTENPORT -j ACCEPT
-      iptables -I INPUT -s \"\$ipaddress\" -p tcp --dport $OLISTENPORT -j ACCEPT
-      netfilter-persistent save
-    fi
-  done
-  " > /home/$LUNM/root_pass.sh
+  cp $SETUPDIR/root_pass.sh /home/$LUNM/root_pass.sh
+  sed -i -e "s/LUNM/$LUNM/g" /home/$LUNM/root_pass.sh
+
+  echo "generating root flush script file"
+  cp $SETUPDIR/root_flush.sh /home/$LUNM/root_flush.sh
+  sed -i -e "s/LUNM/$LUNM/g" /home/$LUNM/root_flush.sh
 done
 
 echo "done!"

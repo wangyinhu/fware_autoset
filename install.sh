@@ -1,17 +1,17 @@
 #!/bin/bash
 
 PROJECT_NAME="ippass"
-LINUX_USERNAME="yale"
+LUNM="yale"
 
 #root check
 if [[ $EUID -ne 0 ]]; then
-   echo "This script must be run as root"
+   echo "This script must run as root"
    exit 1
 fi
 
-apt install nginx uwsgi uwsgi-plugin-python3 python3-pip inotify-tools
+apt install nginx uwsgi uwsgi-plugin-python3 python3-pip inotify-tools apache2-utils
 
-adduser www-data $LINUX_USERNAME
+adduser www-data $LUNM
 
 echo "setting up config..."
 sed -i -e "s/ippass/$PROJECT_NAME/g" uwsgi.ini
@@ -19,12 +19,16 @@ sed -i -e "s/ippass/$PROJECT_NAME/g" reload.sh
 sed -i -e "s/ippass/$PROJECT_NAME/g" start.sh
 sed -i -e "s/ippass/$PROJECT_NAME/g" stop.sh
 
-cp config_temp/ippass.conf /etc/nginx/sites-available/$PROJECT_NAME.conf
+cp setup/ippass.conf /etc/nginx/sites-available/$PROJECT_NAME.conf
 
 sed -i -e "s/ippass/$PROJECT_NAME/g" /etc/nginx/sites-available/$PROJECT_NAME.conf
-sed -i -e "s/LINUX_USERNAME/$LINUX_USERNAME/g" /etc/nginx/sites-available/$PROJECT_NAME.conf
+sed -i -e "s/LUNM/$LUNM/g" /etc/nginx/sites-available/$PROJECT_NAME.conf
 
 ln -s /etc/nginx/sites-available/$PROJECT_NAME.conf /etc/nginx/sites-enabled/$PROJECT_NAME.conf
+
+cd /home/$LUNM || exit 1
+
+htpasswd -c nginx_pass $LUNM
 
 service nginx restart
 
@@ -32,7 +36,7 @@ pip3 install django
 
 mkdir /var/log/uwsgi/
 
-chown $LINUX_USERNAME:$LINUX_USERNAME /var/log/uwsgi/
+chown $LUNM:$LUNM /var/log/uwsgi/
 
 echo "installing qbittorrent-nox"
 
