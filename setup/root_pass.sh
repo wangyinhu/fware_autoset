@@ -2,6 +2,7 @@
 ipaddress="null"
 PASS_FILE=/home/LUNM/pass_ip.txt
 touch $PASS_FILE
+chown LUNM:LUNM $PASS_FILE
 while inotifywait -e close_write $PASS_FILE; do
 	temp="$(cat $PASS_FILE)"
 	if [ "$temp" != "$ipaddress" ]; then

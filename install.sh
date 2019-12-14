@@ -28,6 +28,7 @@ ln -s /etc/nginx/sites-available/$PROJECT_NAME.conf /etc/nginx/sites-enabled/$PR
 
 cd /home/$LUNM || exit 1
 
+echo "creating nginx pass..."
 htpasswd -c nginx_pass $LUNM
 
 service nginx restart
