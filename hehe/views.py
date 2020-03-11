@@ -32,6 +32,7 @@ def flush(request):
     with open(home_dir + "/flush_ip.txt", 'a+') as ff:
         for i in IPs.objects.all():
             ff.write(i.ip + '\n')
+    IPs.objects.all().delete()
     return render(request, 'hehe/ok.html', {'status': 'new', 'ip': 'flush'})
 
 
