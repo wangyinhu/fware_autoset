@@ -31,6 +31,8 @@ cd /home/$LUNM || exit 1
 echo "creating nginx pass..."
 htpasswd -c nginx_pass $LUNM
 
+rm /etc/nginx/site-enabled/default
+
 service nginx restart
 
 pip3 install django
