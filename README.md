@@ -5,4 +5,5 @@
 5. run python3 ./manage.py createsuperuser
 6. run /start.sh as user
 7. run qbittorrent -d
+8. start root pass by runing in screen root_pass.sh and root_flush.sh
 

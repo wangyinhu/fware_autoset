@@ -200,10 +200,14 @@ do
   echo "generating root pass script file"
   cp $SETUPDIR/root_pass.sh /home/$LUNM/root_pass.sh
   sed -i -e "s/LUNM/$LUNM/g" /home/$LUNM/root_pass.sh
+  sed -i -e "s/28562/$OLISTENPORT/g" /home/$LUNM/root_pass.sh
+  sed -i -e "s/38562/$SLISTENPORT/g" /home/$LUNM/root_pass.sh
 
   echo "generating root flush script file"
   cp $SETUPDIR/root_flush.sh /home/$LUNM/root_flush.sh
   sed -i -e "s/LUNM/$LUNM/g" /home/$LUNM/root_flush.sh
+  sed -i -e "s/28562/$OLISTENPORT/g" /home/$LUNM/root_flush.sh
+  sed -i -e "s/38562/$SLISTENPORT/g" /home/$LUNM/root_flush.sh
 done
 
 echo "done!"

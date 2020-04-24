@@ -9,7 +9,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-apt install nginx uwsgi uwsgi-plugin-python3 python3-pip inotify-tools apache2-utils
+apt install nginx uwsgi uwsgi-plugin-python3 python3-pip inotify-tools apache2-utils screen
 
 adduser www-data $LUNM
 
