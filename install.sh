@@ -31,7 +31,7 @@ cd /home/$LUNM || exit 1
 echo "creating nginx pass..."
 htpasswd -c nginx_pass $LUNM
 
-rm /etc/nginx/site-enabled/default
+rm /etc/nginx/sites-enabled/default
 
 service nginx restart
 
