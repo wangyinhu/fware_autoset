@@ -6,4 +6,4 @@
 6. run /start.sh as user
 7. run qbittorrent -d
 8. start root pass by runing in screen root_pass.sh and root_flush.sh
-
+9. run aria2 background service

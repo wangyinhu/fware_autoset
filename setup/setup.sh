@@ -67,7 +67,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "installing the ocserv"
-apt install ocserv gnutls-bin
+apt install ocserv gnutls-bin aria2
 
 echo "goto /etc/ocserv/"
 
@@ -215,6 +215,12 @@ echo "done!"
 apt install iptables-persistent netfilter-persistent
 
 netfilter-persistent save
+
+cp $SETUPDIR/index.html /var/www/html/
+
+cd /var/www/html/ || exit
+
+git clone https://github.com/ziahamza/webui-aria2
 
 
 echo "starting service ocserv...."
