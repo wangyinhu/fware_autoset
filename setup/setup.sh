@@ -140,6 +140,7 @@ cd /etc/shadowsocks-libev/ || exit 1
 echo "changing config parameter..."
 
 sed -i -e "s/8388/$SLISTENPORT/g" config.json
+sed -i -e "s/127.0.0.1/$INTERFACE_IP/g" config.json
 
 echo "install sss-libev done!"
 
