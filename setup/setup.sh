@@ -67,7 +67,7 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "installing the ocserv"
-apt install ocserv gnutls-bin aria2
+apt install nginx ocserv gnutls-bin aria2
 
 echo "goto /etc/ocserv/"
 
