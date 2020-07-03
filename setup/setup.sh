@@ -136,19 +136,17 @@ do
 done
 
 echo "installing software"
-apt install shadowsocks
+apt install shadowsocks-libev
 
-echo "goto /etc/shadowsocks/"
+echo "goto /etc/shadowsocks-libev/"
 
-cd /etc/shadowsocks/ || exit 1
+cd /etc/shadowsocks-libev/ || exit 1
 
 echo "changing config parameter..."
 
-sed -i -e "s/my_server_ip/$INTERFACE_IP/g" config.json
 sed -i -e "s/8388/$SLISTENPORT/g" config.json
-sed -i -e "s/mypassword/$PASSWORD/g" config.json
 
-echo "install sss done!"
+echo "install sss-libev done!"
 
 echo "************iptables config************"
 
@@ -228,5 +226,5 @@ service ocserv restart
 echo "ocserv done!"
 
 echo "starting ss service..."
-service shadowsocks restart
+service shadowsocks-libev restart
 echo "all job done!"
