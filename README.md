@@ -1,4 +1,4 @@
-1. run /setup/setup.sh as root
+1. enter /setup and run setup.sh as root
 2. run /install.sh as root
 3. run python3 ./manage.py makemigrations
 4. run python3 ./manage.py migrate
