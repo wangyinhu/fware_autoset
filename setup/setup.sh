@@ -87,15 +87,6 @@ certtool --generate-certificate --load-privkey server-key.pem --load-ca-certific
 
 sed -i -e "s/443/$OLISTENPORT/g" /lib/systemd/system/ocserv.socket
 
-sed -i -e "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" /etc/sysctl.conf
-
-echo "net.core.default_qdisc = fq" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_congestion_control = bbr" >> /etc/sysctl.conf
-echo "net.ipv4.tcp_fastopen = 3" >> /etc/sysctl.conf
-
-sysctl -p /etc/sysctl.conf
-
-
 OCSERV_CONF="ocserv.conf"
 echo "generating file $OCSERV_CONF"
 
@@ -224,6 +215,29 @@ cd /var/www/html/ || exit
 
 git clone https://github.com/ziahamza/webui-aria2
 
+# sysctl config
+SYSCTL_CONF="/etc/sysctl.conf"
+sed -i -e "s/#net.ipv4.ip_forward=1/net.ipv4.ip_forward=1/g" $SYSCTL_CONF
+
+NEEDLE="net.core.default_qdisc = fq"
+if grep -Fxq "$NEEDLE" $SYSCTL_CONF
+then
+echo "$NEEDLE" >> $SYSCTL_CONF
+fi
+
+NEEDLE="net.ipv4.tcp_congestion_control = bbr"
+if grep -Fxq "$NEEDLE" $SYSCTL_CONF
+then
+echo "$NEEDLE" >> $SYSCTL_CONF
+fi
+
+NEEDLE="net.ipv4.tcp_fastopen = 3"
+if grep -Fxq "$NEEDLE" $SYSCTL_CONF
+then
+echo "$NEEDLE" >> $SYSCTL_CONF
+fi
+
+sysctl -p
 
 echo "starting service ocserv...."
 service ocserv restart
