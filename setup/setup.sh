@@ -112,7 +112,7 @@ do
   fi
   #生成密码
   echo "please input password for auth ocpasswd"
-  ocpasswd -c /etc/ocserv/ocpasswd $USERNAME
+  ocpasswd -c /etc/ocserv/ocpasswd $USERNAME   
 done
 
 echo "done!"
