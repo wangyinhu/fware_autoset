@@ -41,6 +41,10 @@ def get_client_ip(request):
     return ip
 
 
+def index(request):
+    return render(request, 'hehe/index.html')
+
+
 @login_required
 def home(request):
     ip = get_client_ip(request)

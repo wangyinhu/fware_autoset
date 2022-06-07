@@ -18,6 +18,7 @@ from django.urls import path
 from hehe import views
 
 urlpatterns = [
+    path('', views.index, name='home'),
     path('admin/', admin.site.urls),
     path('ippass/', views.home, name='home'),
     path('man/', views.man, name='man'),
