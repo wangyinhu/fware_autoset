@@ -210,8 +210,6 @@ apt install iptables-persistent netfilter-persistent
 
 netfilter-persistent save
 
-cp $SETUPDIR/index.html /var/www/html/
-
 cd /var/www/html/ || exit
 
 git clone https://github.com/ziahamza/webui-aria2
