@@ -2,7 +2,34 @@ from django.shortcuts import render
 from django.contrib.auth.decorators import login_required
 from django import forms
 from hehe.models import IPs
-import os
+import os, shutil
+
+
+def clear_folder(folder):
+    for filename in os.listdir(folder):
+        file_path = os.path.join(folder, filename)
+        try:
+            if os.path.isfile(file_path) or os.path.islink(file_path):
+                os.unlink(file_path)
+            elif os.path.isdir(file_path):
+                shutil.rmtree(file_path)
+        except Exception as e:
+            print('Failed to delete %s. Reason: %s' % (file_path, e))
+
+
+def get_available_disk():
+    path = '/'
+    st = os.statvfs(path)
+    # free blocks available * fragment size
+    bytes_avail = (st.f_bavail * st.f_frsize)
+    gigabytes = bytes_avail / 1024 / 1024 / 1024
+    return gigabytes
+
+
+def clear_download():
+    print('clear_download')
+    download_dir = '../Downloads'
+    clear_folder(download_dir)
 
 
 def get_client_ip(request):
@@ -24,6 +51,19 @@ def home(request):
         IPs.objects.create(ip=ip)
         os.system('echo "' + ip + '" > $HOME/pass_ip.txt')
         return render(request, 'hehe/ok.html', {'status': 'new', 'ip': ip})
+
+
+@login_required
+def man(request):
+    ip = get_client_ip(request)
+    avail = get_available_disk()
+    print(request.method)
+    if request.method == 'POST':
+        print('POSTPOSTPOST')
+        clear_download()
+        return render(request, 'hehe/ok.html', {'status': '已清空', 'ip': f'{round(float(avail), 2)}GB'})
+    else:
+        return render(request, 'hehe/man.html', {'avail':  round(float(avail), 2), 'ip': ip})
 
 
 @login_required

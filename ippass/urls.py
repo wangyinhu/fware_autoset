@@ -20,5 +20,6 @@ from hehe import views
 urlpatterns = [
     path('admin/', admin.site.urls),
     path('ippass/', views.home, name='home'),
+    path('man/', views.man, name='man'),
     path('ippass/flush/', views.flush, name='flush'),
 ]
