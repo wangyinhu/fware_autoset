@@ -150,7 +150,7 @@ iptables -t nat -A POSTROUTING -s $VNET/24 -o $INTERFACE_NAME -j MASQUERADE
 
 
 #stop 443 port access
-iptables -I INPUT -p tcp --dport 443 -j DROP
+# iptables -I INPUT -p tcp --dport 443 -j DROP
 
 iptables -I INPUT -p tcp --dport $OLISTENPORT -j DROP
 iptables -I INPUT -p tcp --dport $SLISTENPORT -j DROP
