@@ -1,7 +1,7 @@
 #!/bin/bash
 
 PROJECT_NAME="ippass"
-LUNM="yale"
+LUNM=$(logname)
 
 #root check
 if [[ $EUID -ne 0 ]]; then
@@ -15,6 +15,7 @@ adduser www-data $LUNM
 
 echo "setting up config..."
 sed -i -e "s/ippass/$PROJECT_NAME/g" uwsgi.ini
+sed -i -e "s/LUNM/$LUNM/g" uwsgi.ini
 sed -i -e "s/ippass/$PROJECT_NAME/g" reload.sh
 sed -i -e "s/ippass/$PROJECT_NAME/g" start.sh
 sed -i -e "s/ippass/$PROJECT_NAME/g" stop.sh
