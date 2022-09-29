@@ -4,6 +4,5 @@
 4. run python3 ./manage.py migrate
 5. run python3 ./manage.py createsuperuser
 6. run /start.sh as user
-7. run qbittorrent -d
-8. start root pass by runing in screen root_pass.sh and root_flush.sh in ~ dir
-9. run aria2 background service
+7. start root pass by runing in screen root_pass.sh and root_flush.sh in ~ dir
+8. run aria2 background service

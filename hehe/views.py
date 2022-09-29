@@ -23,7 +23,7 @@ def get_available_disk():
     # free blocks available * fragment size
     bytes_avail = (st.f_bavail * st.f_frsize)
     gigabytes = bytes_avail / 1024 / 1024 / 1024
-    return gigabytes
+    return round(float(gigabytes), 2)
 
 
 def clear_download():
@@ -42,7 +42,9 @@ def get_client_ip(request):
 
 
 def index(request):
-    return render(request, 'hehe/index.html')
+    avail = get_available_disk()
+    ip = get_client_ip(request)
+    return render(request, 'hehe/index.html', {'avail':  avail, 'ip': ip})
 
 
 @login_required
@@ -65,9 +67,9 @@ def man(request):
     if request.method == 'POST':
         print('POSTPOSTPOST')
         clear_download()
-        return render(request, 'hehe/ok.html', {'status': '已清空', 'ip': f'{round(float(avail), 2)}GB'})
+        return render(request, 'hehe/ok.html', {'status': '已清空', 'ip': f'{avail}GB'})
     else:
-        return render(request, 'hehe/man.html', {'avail':  round(float(avail), 2), 'ip': ip})
+        return render(request, 'hehe/man.html', {'avail':  avail, 'ip': ip})
 
 
 @login_required

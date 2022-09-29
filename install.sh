@@ -29,7 +29,7 @@ ln -s /etc/nginx/sites-available/$PROJECT_NAME.conf /etc/nginx/sites-enabled/$PR
 
 cd /home/$LUNM || exit 1
 
-echo "creating nginx pass..."
+echo "creating nginx pass for user $LUNM"
 htpasswd -c nginx_pass $LUNM
 
 rm /etc/nginx/sites-enabled/default
@@ -41,9 +41,5 @@ pip3 install django
 mkdir /var/log/uwsgi/
 
 chown $LUNM:$LUNM /var/log/uwsgi/
-
-echo "installing qbittorrent-nox"
-
-apt install qbittorrent-nox
 
 echo 'all done!'
