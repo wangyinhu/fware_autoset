@@ -49,13 +49,6 @@ netfilter-persistent save
 
 LUNM=$(logname)
 
-echo "generating ippass.sh"
-IPPASS=/home/$LUNM/ippass.sh
-cp $SETUPDIR/ippass.sh $IPPASS
-sed -i -e "s/SLISTENPORT/$SLISTENPORT/g" $IPPASS
-chown $LUNM:$LUNM $IPPASS
-chmod +x $IPPASS
-
 echo "generating root pass script file"
 cp $SETUPDIR/root_pass.sh /home/$LUNM/root_pass.sh
 sed -i -e "s/LUNM/$LUNM/g" /home/$LUNM/root_pass.sh
