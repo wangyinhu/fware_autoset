@@ -1,3 +1,3 @@
 #!/bin/bash
-uwsgi --reload /tmp/uwsgi-ippass.pid
+uwsgi --reload /run/uwsgi-ippass.pid
 
