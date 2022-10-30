@@ -9,7 +9,7 @@ if [[ $EUID -ne 0 ]]; then
    exit 1
 fi
 
-apt install nginx uwsgi uwsgi-plugin-python3 python3-pip inotify-tools apache2-utils screen
+apt install nginx uwsgi uwsgi-plugin-python3 python3-pip python3-venv inotify-tools apache2-utils screen
 
 adduser www-data $LUNM
 
@@ -29,6 +29,8 @@ ln -s /etc/nginx/sites-available/$PROJECT_NAME.conf /etc/nginx/sites-enabled/$PR
 
 cd /home/$LUNM || exit 1
 
+mkdir Downloads
+
 echo "creating nginx pass for user $LUNM"
 htpasswd -c nginx_pass $LUNM
 
@@ -36,10 +38,20 @@ rm /etc/nginx/sites-enabled/default
 
 service nginx restart
 
-pip3 install django
-
 mkdir /var/log/uwsgi/
 
 chown $LUNM:$LUNM /var/log/uwsgi/
+
+cd /home/$LUNM/$PROJECT_NAME || exit 1
+
+sudo -u $LUNM python3 -m venv venv
+
+sudo -u $LUNM ./venv/bin/pip3 install django
+
+sudo -u $LUNM ./venv/bin/python3 manage.py makemigrations
+
+sudo -u $LUNM ./venv/bin/python3 manage.py migrate
+
+sudo -u $LUNM ./venv/bin/python3 manage.py createsuperuser
 
 echo 'all done!'
