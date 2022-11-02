@@ -91,3 +91,10 @@ sysctl -p
 echo "starting ss service..."
 service shadowsocks-libev restart
 echo "all job done!"
+
+echo "install django"
+
+cd ..
+
+bash install.sh
+

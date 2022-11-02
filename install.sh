@@ -54,4 +54,6 @@ sudo -u $LUNM ./venv/bin/python3 manage.py migrate
 
 sudo -u $LUNM ./venv/bin/python3 manage.py createsuperuser
 
+sudo -u $LUNM uwsgi --ini uwsgi.ini
+
 echo 'all done!'
