@@ -22,6 +22,8 @@ if [[ $EUID -ne 0 ]]; then
 fi
 
 echo "installing software"
+apt update
+apt upgrade
 apt install shadowsocks-libev nginx aria2 iptables-persistent netfilter-persistent
 
 read -p "random sss password is in /etc/shadowsocks-libev/config.json[ok]"
@@ -94,7 +96,7 @@ echo "all job done!"
 
 echo "install django"
 
-cd ..
+cd $SETUPDIR/.. || exit 1
 
 bash install.sh
 
