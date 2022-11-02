@@ -44,6 +44,8 @@ chown $LUNM:$LUNM /var/log/uwsgi/
 
 cd /home/$LUNM/$PROJECT_NAME || exit 1
 
+echo "setting up python venv..."
+
 sudo -u $LUNM python3 -m venv venv
 
 sudo -u $LUNM ./venv/bin/pip3 install django

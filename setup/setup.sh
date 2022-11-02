@@ -26,8 +26,6 @@ apt update
 apt upgrade
 apt install shadowsocks-libev nginx aria2 iptables-persistent netfilter-persistent
 
-read -p "random sss password is in /etc/shadowsocks-libev/config.json[ok]"
-
 echo "goto /etc/shadowsocks-libev/"
 
 cd /etc/shadowsocks-libev/ || exit 1
@@ -37,6 +35,10 @@ echo "changing config parameter..."
 sed -i -e "s/8388/$SLISTENPORT/g" config.json
 sed -i -e "s/127.0.0.1/0.0.0.0/g" config.json
 sed -i -e "s/::1/::0/g" config.json
+
+cat /etc/shadowsocks-libev/config.json
+
+read -p "save config above please[ok]"
 
 echo "install sss-libev done!"
 
